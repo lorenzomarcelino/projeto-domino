@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Socket.IO Test</title>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Simple Socket.IO Connection Test</h1>
+    <div id="status">Testing...</div>
+    <div id="logs"></div>
+    <button onclick="testJoin()" id="joinBtn" disabled>Test Join Game</button>
+    
+    <script>
+        console.log('Starting connection test...');
+        
+        const socket = io('http://localhost:3001', {
+            transports: ['polling', 'websocket'],
+            upgrade: true,
+            rememberUpgrade: false,
+            timeout: 20000,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
+        });
+        
+        const statusDiv = document.getElementById('status');
+        const logsDiv = document.getElementById('logs');
+        const joinBtn = document.getElementById('joinBtn');
+        
+        function addLog(message) {
+            const p = document.createElement('p');
+            p.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            logsDiv.appendChild(p);
+            console.log(message);
+        }
+        
+        socket.on('connect', () => {
+            statusDiv.textContent = 'Connected! Socket ID: ' + socket.id;
+            statusDiv.style.color = 'green';
+            joinBtn.disabled = false;
+            addLog('Successfully connected with ID: ' + socket.id);
+        });
+        
+        socket.on('connect_error', (error) => {
+            statusDiv.textContent = 'Connection Error: ' + error.message;
+            statusDiv.style.color = 'red';
+            addLog('Connection error: ' + error.message);
+        });
+        
+        socket.on('disconnect', (reason) => {
+            statusDiv.textContent = 'Disconnected: ' + reason;
+            statusDiv.style.color = 'orange';
+            joinBtn.disabled = true;
+            addLog('Disconnected: ' + reason);
+        });
+        
+        socket.on('joinedGame', (data) => {
+            addLog('SUCCESS: Joined game - ' + JSON.stringify(data));
+        });
+        
+        socket.on('joinError', (data) => {
+            addLog('ERROR: Join failed - ' + data.message);
+        });
+        
+        function testJoin() {
+            addLog('Testing join game...');
+            socket.emit('joinGame', { playerName: 'TestPlayer' + Math.floor(Math.random() * 100) });
+        }
+    </script>
+</body>
+</html> 

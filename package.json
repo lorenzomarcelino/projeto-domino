@@ -1,0 +1,21 @@
+{
+  "name": "domino-online",
+  "version": "1.0.0",
+  "description": "Um jogo de dominó online para 4 jogadores em duplas",
+  "main": "start-game.js",
+  "scripts": {
+    "start": "node start-game.js",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build"
+  },
+  "keywords": [
+    "domino",
+    "game",
+    "socket.io",
+    "react"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+  }
+} 

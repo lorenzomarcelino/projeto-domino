@@ -1,0 +1,39 @@
+# Geral
+*.log
+.DS_Store
+
+# Frontend (React - exemplo)
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.eslintcache
+frontend/.next/ # Se for Next.js
+frontend/out/   # Se for Next.js static export
+
+# Backend (Exemplo para Node.js)
+backend/node_modules/
+backend/.env
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# Backend (Exemplo para Python)
+backend/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/venv/
+backend/env/
+backend/.env
+backend/instance/ # Para Flask
+
+# Outros que podem ser específicos do seu backend
+# backend/target/ (se for Java/Maven)
+# backend/bin/
+# backend/obj/ (se for .NET)

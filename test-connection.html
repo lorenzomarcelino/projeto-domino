@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Connection Test</title>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Socket.IO Connection Test</h1>
+    <div id="status">Connecting...</div>
+    <div id="logs"></div>
+    
+    <script>
+        const socket = io('http://localhost:3001', {
+            transports: ['websocket', 'polling']
+        });
+        
+        const statusDiv = document.getElementById('status');
+        const logsDiv = document.getElementById('logs');
+        
+        function addLog(message) {
+            const p = document.createElement('p');
+            p.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            logsDiv.appendChild(p);
+            console.log(message);
+        }
+        
+        socket.on('connect', () => {
+            statusDiv.textContent = 'Connected! Socket ID: ' + socket.id;
+            statusDiv.style.color = 'green';
+            addLog('Connected to server with ID: ' + socket.id);
+        });
+        
+        socket.on('connected', (data) => {
+            addLog('Server confirmed connection: ' + JSON.stringify(data));
+        });
+        
+        socket.on('connect_error', (error) => {
+            statusDiv.textContent = 'Connection Error: ' + error.message;
+            statusDiv.style.color = 'red';
+            addLog('Connection error: ' + error.message);
+        });
+        
+        socket.on('disconnect', (reason) => {
+            statusDiv.textContent = 'Disconnected: ' + reason;
+            statusDiv.style.color = 'orange';
+            addLog('Disconnected: ' + reason);
+        });
+        
+        // Test join game after 2 seconds
+        setTimeout(() => {
+            if (socket.connected) {
+                addLog('Testing joinGame event...');
+                socket.emit('joinGame', { playerName: 'TestPlayer' });
+            }
+        }, 2000);
+        
+        socket.on('joinedGame', (data) => {
+            addLog('Successfully joined game: ' + JSON.stringify(data));
+        });
+        
+        socket.on('joinError', (data) => {
+            addLog('Join error: ' + data.message);
+        });
+    </script>
+</body>
+</html> 
